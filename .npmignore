@@ -1,0 +1,12 @@
+.idea
+node_modules
+.DS_store
+.env*
+src
+coverage
+tsconfig.tsbuildinfo
+
+
+# ignored because we're not using them.
+migrations
+models

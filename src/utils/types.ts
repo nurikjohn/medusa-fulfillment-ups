@@ -113,13 +113,14 @@ interface Shipment {
   PaymentDetails: PaymentDetails;
   Service: Service;
   NumOfPieces: string;
-  Package: Package;
+  Package: UPSPackage[];
 }
 interface Shipper {
   Name: string;
   ShipperNumber: string;
   Address: UPSAddress;
 }
+
 export interface UPSAddress {
   AddressLine: string[];
   City?: string;
@@ -127,6 +128,7 @@ export interface UPSAddress {
   CountryCode?: string;
   PostalCode?: string;
 }
+
 interface ShipTo {
   Name: string;
   Address: UPSAddress;
@@ -145,9 +147,11 @@ interface Service {
   Code: string;
   Description: string;
 }
-interface Package {
+
+export interface UPSPackage {
   SimpleRate: SimpleRate;
   PackagingType: PackagingType;
+  Dimensions: Dimensions;
   PackageWeight: PackageWeight;
 }
 interface SimpleRate {
@@ -158,11 +162,17 @@ interface PackagingType {
   Code: string;
   Description: string;
 }
-interface PackageWeight {
+interface Dimensions {
   UnitOfMeasurement: UnitOfMeasurement;
-  Weight: string;
+  Length: string;
+  Width: string;
+  Height: string;
 }
 interface UnitOfMeasurement {
   Code: string;
   Description: string;
+}
+interface PackageWeight {
+  UnitOfMeasurement: UnitOfMeasurement;
+  Weight: string;
 }

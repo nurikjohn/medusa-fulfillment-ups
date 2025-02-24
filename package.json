@@ -1,6 +1,6 @@
 {
   "name": "medusa-fulfillment-ups",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "public": true,
   "description": "A Medusa fulfillment provider plugin for UPS",
   "main": ".dist/index.js",

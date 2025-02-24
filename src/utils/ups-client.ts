@@ -1,22 +1,39 @@
 import axios, { Axios } from "axios";
-import { UPSAddress, UPSAuthToken, UPSGetRatePayload, UPSRate } from "./types";
+import {
+  UPSPackage,
+  UPSAddress,
+  UPSAuthToken,
+  UPSGetRatePayload,
+  UPSRate,
+} from "./types";
 
 export interface UPSClientProps {
   clientID: string;
   clientSecret: string;
+  accountNumber: string;
+  shipFrom: UPSAddress;
 }
 
 export class UPSClient {
   clientID: string;
   clientSecret: string;
+  accountNumber: string;
+  shipFrom: UPSAddress;
 
   client: Axios;
 
   token: UPSAuthToken;
 
-  constructor({ clientID, clientSecret }: UPSClientProps) {
+  constructor({
+    clientID,
+    clientSecret,
+    accountNumber,
+    shipFrom,
+  }: UPSClientProps) {
     this.clientID = clientID;
     this.clientSecret = clientSecret;
+    this.accountNumber = accountNumber;
+    this.shipFrom = shipFrom;
 
     this.client = axios.create({
       baseURL: "https://onlinetools.ups.com",
@@ -57,7 +74,7 @@ export class UPSClient {
     }
   }
 
-  async getRates(shipping_address: UPSAddress, weight: string) {
+  async getRates(shipping_address: UPSAddress, packages: UPSPackage[]) {
     await this.refreshToken();
 
     const payload: UPSGetRatePayload = {
@@ -74,18 +91,8 @@ export class UPSClient {
         Shipment: {
           Shipper: {
             Name: "ShipperName",
-            ShipperNumber: "WK1250",
-            Address: {
-              AddressLine: [
-                "ShipperAddressLine",
-                "ShipperAddressLine",
-                "ShipperAddressLine",
-              ],
-              City: "TIMONIUM",
-              StateProvinceCode: "MD",
-              CountryCode: "US",
-              PostalCode: "21093",
-            },
+            ShipperNumber: this.accountNumber,
+            Address: this.shipFrom,
           },
           ShipTo: {
             Name: "ShipToName",
@@ -96,7 +103,7 @@ export class UPSClient {
               {
                 Type: "01",
                 BillShipper: {
-                  AccountNumber: "WK1250",
+                  AccountNumber: this.accountNumber,
                 },
               },
             ],
@@ -106,23 +113,7 @@ export class UPSClient {
             Description: "Ground",
           },
           NumOfPieces: "1",
-          Package: {
-            SimpleRate: {
-              Description: "SimpleRateDescription",
-              Code: "XS",
-            },
-            PackagingType: {
-              Code: "02",
-              Description: "Packaging",
-            },
-            PackageWeight: {
-              UnitOfMeasurement: {
-                Code: "LBS",
-                Description: "Pounds",
-              },
-              Weight: weight,
-            },
-          },
+          Package: packages,
         },
       },
     };

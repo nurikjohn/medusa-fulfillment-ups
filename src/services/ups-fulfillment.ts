@@ -1,7 +1,7 @@
 import { ClaimService, LineItem, OrderService } from "@medusajs/medusa";
 import { AbstractFulfillmentService, Address, Cart } from "@medusajs/medusa";
-import { log } from "utils/helpers";
-import { UPSPackage, UPSAddress } from "utils/types";
+import { log } from "../utils/helpers";
+import { UPSPackage, UPSAddress } from "../utils/types";
 import { UPSClient } from "../utils/ups-client";
 
 export interface UPSFulfillmentPluginOptions {
